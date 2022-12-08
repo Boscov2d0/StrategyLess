@@ -1,12 +1,9 @@
 {
-    "name": "Presenter",
+    "name": "CommandsRealization",
     "rootNamespace": "",
     "references": [
         "GUID:c7e8f33b45ac91648b6253f97be592a9",
-        "GUID:24e107b8f1e8d1641a91c8a3a07e8e2a",
-        "GUID:0e2b567876fe0a14b9925cd7dc15df29",
-        "GUID:169cf7cb17f9add4abc1b87e90ef3b11",
-        "GUID:a822259adc999fa4f8f09f92187ffd06"
+        "GUID:169cf7cb17f9add4abc1b87e90ef3b11"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

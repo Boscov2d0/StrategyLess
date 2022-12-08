@@ -2,9 +2,9 @@ using System;
 using Abstractions;
 using UnityEngine;
 
-namespace UserControlSystem
+namespace UserControllSystem
 {
-    [CreateAssetMenu(fileName = nameof(SelectableValue), menuName = "Strategu game/" + nameof(SelectableValue), order = 0)]
+    [CreateAssetMenu(fileName = nameof(SelectableValue), menuName = "Strategy game/" + nameof(SelectableValue), order = 0)]
     public class SelectableValue : ScriptableObject
     {
         public ISelectable CurrentValue { get; private set; }
