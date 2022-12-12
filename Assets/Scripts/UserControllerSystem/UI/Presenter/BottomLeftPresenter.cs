@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Abstractions;
+using UserControllSystem.UI.Model;
 
 namespace UserControllSystem
 {
@@ -16,7 +17,7 @@ namespace UserControllSystem
 
         private void Start()
         {
-            _selectedValue.OnSelected += Onselected;
+            _selectedValue.OnNewValue += Onselected;
             Onselected(_selectedValue.CurrentValue);
         }
 

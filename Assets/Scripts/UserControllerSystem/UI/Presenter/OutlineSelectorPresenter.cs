@@ -1,6 +1,7 @@
 using UnityEngine;
 using UserControllSystem.UI.View;
 using Abstractions;
+using UserControllSystem.UI.Model;
 
 namespace UserControllSystem.UI.Presenter
 {
@@ -13,7 +14,7 @@ namespace UserControllSystem.UI.Presenter
 
         private void Start()
         {
-            _selectable.OnSelected += onSelected;
+            _selectable.OnNewValue += onSelected;
             onSelected(_selectable.CurrentValue);
         }
         private void onSelected(ISelectable selectable)

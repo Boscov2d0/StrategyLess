@@ -13,7 +13,7 @@ namespace UserControllSystem.UI.View
         [SerializeField] private Button _attackButton;
         [SerializeField] private Button _moveButton;
         [SerializeField] private Button _patrolButton;
-        [SerializeField] private Button _holdPositionButton;
+        [SerializeField] private Button _stopButton;
         [SerializeField] private Button _produceUnitButton;
 
         private Dictionary<Type, Button> _buttonsByExecutorType;
@@ -27,46 +27,46 @@ namespace UserControllSystem.UI.View
             _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IAttackCommand>), _attackButton);
             _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IMoveCommand>), _moveButton);
             _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IPatrolCommand>), _patrolButton);
-            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IHoldPositionCommand>), _holdPositionButton);
+            _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IStopCommand>), _stopButton);
             _buttonsByExecutorType.Add(typeof(CommandExecutorBase<IProduceUnitCommand>), _produceUnitButton);
+        }
+        public void BlockInteractions(ICommandExecutor ce)
+        {
+            UnblockAllInteractions();
+            GetButtonGameObjectByType(ce.GetType()).GetComponent<Selectable>().interactable = false;
+        }
+        public void UnblockAllInteractions() => setInteractible(true);
+        private void setInteractible(bool value)
+        {
+            _attackButton.GetComponent<Selectable>().interactable = value;
+            _moveButton.GetComponent<Selectable>().interactable = value;
+            _patrolButton.GetComponent<Selectable>().interactable = value;
+            _stopButton.GetComponent<Selectable>().interactable = value;
+            _produceUnitButton.GetComponent<Selectable>().interactable = value;
         }
         public void MakeLayout(List<ICommandExecutor> commandExecutors)
         {
-            /*
-            for (int i = 0; i < commandExecutors.Count; i++)
-            {
-                Button buttonGameObject = _buttonsByExecutorType
-                    .Where(type => type
-                    .Key
-                    .IsAssignableFrom(commandExecutors[i].GetType()))
-                    .First()
-                    .Value;
-
-                buttonGameObject.gameObject.SetActive(true);
-                Button button = buttonGameObject;
-                button.onClick.AddListener(() => OnClick?.Invoke(commandExecutors[i]));
-            }*/
             foreach (var currentExecutor in commandExecutors)
             {
-                Button buttonGameObject = _buttonsByExecutorType
-                .Where(type => type
-                .Key
-                .IsAssignableFrom(currentExecutor.GetType()))
-                .First()
-                .Value;
+                Button buttonGameObject = GetButtonGameObjectByType(currentExecutor.GetType());
                 buttonGameObject.gameObject.SetActive(true);
-                Button button = buttonGameObject;
-                button.onClick.AddListener(() => OnClick?.Invoke(currentExecutor));
+                buttonGameObject.onClick.AddListener(() =>
+                OnClick?.Invoke(currentExecutor));
             }
+        }
+        private Button GetButtonGameObjectByType(Type executorInstanceType)
+        {
+            /*
+            return _buttonsByExecutorType
+            .Where(type =>
+            type.Key.IsAssignableFrom(executorInstanceType))
+            .First()
+            .Value;
+            */
+            return _buttonsByExecutorType.First(type => type.Key.IsAssignableFrom(executorInstanceType)).Value;
         }
         public void Clear()
         {
-            /*
-            for (int i = 0; i < _buttonsByExecutorType.Count; i++) 
-            {
-                _buttonsByExecutorType[i].Value.GetComponent<Button>().onClick.RemoveAllListeners();
-                _buttonsByExecutorType[i].Value.gameObject.SetActive(false);
-            }*/
             foreach (var kvp in _buttonsByExecutorType)
             {
                 kvp.Value.GetComponent<Button>().onClick.RemoveAllListeners();
