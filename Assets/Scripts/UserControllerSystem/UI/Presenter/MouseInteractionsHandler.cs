@@ -1,8 +1,11 @@
 using Abstractions;
+using Abstractions.Commands;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UserControllSystem.UI.Model;
+using Zenject;
 
 namespace UserControllSystem
 {
@@ -11,8 +14,13 @@ namespace UserControllSystem
         [SerializeField] private Camera _camera;
         [SerializeField] private SelectableValue _selectedObject;
         [SerializeField] private Vector3Value _groundClicksRMB;
-        [SerializeField] private EnemyValue _enemyValue;
+        [SerializeField] private AttackableValue _attackablesRMB;
         [SerializeField] private Transform _groundTransform;
+
+        [Inject] private CommandButtonsModel _model;
+        public Action<ICommandExecutor> OnClick;
+        ICommandExecutor[] _commands;
+        ISelectable _selectable;
 
         private Plane _groundPlane;
         private Ray _ray;
@@ -33,38 +41,42 @@ namespace UserControllSystem
 
             _ray = _camera.ScreenPointToRay(Input.mousePosition);
             _hits = Physics.RaycastAll(_ray);
-            if (_hits.Length == 0)
-            {
-                return;
-            }
 
             if (Input.GetMouseButtonUp(0))
             {
                 if (CheckHit<ISelectable>(_hits, out var selectable))
                 {
-                    _selectedObject.SetValue(selectable);
+                    _selectable = selectable;
+
+                    _selectedObject.SetValue(_selectable);
                 }
             }
             else
             {
-                if (CheckHit<IEnemy>(_hits, out var enemy))
+                if (CheckHit<IAttackable>(_hits, out var attackable))
                 {
-                    _enemyValue.SetValue(enemy);
+                    _attackablesRMB.SetValue(attackable);
                 }
-                else if (_groundPlane.Raycast(_ray, out var enter))
+                else if (_groundPlane.Raycast(_ray, out var enter) && _selectable.GetType().Name == "AllyUnit")
                 {
+                    _commands = (_selectedObject.CurrentValue as Component).GetComponentsInParent<ICommandExecutor>();
+                    OnClick += _model.OnCommandButtonClicked;
+                    OnClick?.Invoke(_commands[1]);
+                    OnClick -= _model.OnCommandButtonClicked;
                     _groundClicksRMB.SetValue(_ray.origin + _ray.direction * enter);
                 }
             }
         }
-
+        public void ExecuteCommandWrapper(ICommandExecutor commandExecutor, object command)
+        {
+            commandExecutor.ExecuteCommand(command);
+        }
         private bool CheckHit<T>(RaycastHit[] hits, out T result) where T : class
         {
             result = default;
 
             if (hits.Length == 0)
             {
-                Debug.Log("false");
                 return false;
             }
 

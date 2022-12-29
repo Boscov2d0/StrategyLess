@@ -1,15 +1,17 @@
 using Abstractions.Commands.CommandsInterfaces;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UserControllSystem.CommandsRealization
 {
     public class PatrolCommand : IPatrolCommand
     {
-        public List<Vector3> Target { get; }
-        public PatrolCommand(List<Vector3> target)
+        public Vector3 From { get; }
+        public Vector3 To { get; }
+
+        public PatrolCommand(Vector3 from, Vector3 to)
         {
-            Target = target;
+            From = from;
+            To = to;
         }
     }
 }

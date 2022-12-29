@@ -35,8 +35,8 @@ namespace UserControllSystem.UI.View
             UnblockAllInteractions();
             GetButtonGameObjectByType(ce.GetType()).GetComponent<Selectable>().interactable = false;
         }
-        public void UnblockAllInteractions() => setInteractible(true);
-        private void setInteractible(bool value)
+        public void UnblockAllInteractions() => SetInteractible(true);
+        private void SetInteractible(bool value)
         {
             _attackButton.GetComponent<Selectable>().interactable = value;
             _moveButton.GetComponent<Selectable>().interactable = value;

@@ -1,6 +1,6 @@
-using UnityEngine;
 using Abstractions.Commands;
 using Abstractions.Commands.CommandsInterfaces;
+using UnityEngine.AI;
 
 namespace Core.CommandExecutor
 {
@@ -8,7 +8,7 @@ namespace Core.CommandExecutor
     {
         public override void ExecuteSpecificCommand(IStopCommand command)
         {
-            Debug.Log($"{name} has stoped!");
+            GetComponent<NavMeshAgent>().destination = transform.position;
         }
     }
 }

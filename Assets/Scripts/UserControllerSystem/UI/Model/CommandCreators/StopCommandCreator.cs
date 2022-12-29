@@ -14,16 +14,24 @@ namespace UserControllSystem.UI.Model.CommandCreator
         private Action<IStopCommand> _creationCallback;
 
         [Inject]
-        private void Init(Vector3Value groundClicks) =>
-            groundClicks.OnNewValue += OnNewValue;
-
+        private void Init(Vector3Value groundClicks)
+        {
+            //groundClicks.OnNewValue += OnNewValue;
+        }
+        /*
         private void OnNewValue(Vector3 groundClick)
         {
+            Debug.Log("StopCommandCreator OnNewValue");
             _creationCallback?.Invoke(_context.Inject(new StopCommand()));
             ProcessCancel();
-        }
-        protected override void ClassSpecificCommandCreation(Action<IStopCommand> creationCallback) =>
+        }*/
+        protected override void ClassSpecificCommandCreation(Action<IStopCommand> creationCallback)
+        {
             _creationCallback = creationCallback;
+            _creationCallback?.Invoke(_context.Inject(new StopCommand()));
+            ProcessCancel();
+
+        }
 
         public override void ProcessCancel()
         {

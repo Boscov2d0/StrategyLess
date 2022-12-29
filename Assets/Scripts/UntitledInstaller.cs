@@ -1,3 +1,4 @@
+using Abstractions;
 using Abstractions.Commands.CommandsInterfaces;
 using UnityEngine;
 using UserControllSystem.UI.Model;
@@ -9,15 +10,15 @@ using Zenject;
 public class UntitledInstaller : ScriptableObjectInstaller<UntitledInstaller>
 {
     [SerializeField] private AssetsContext _legacyContext;
-    [SerializeField] private Vector3Value _vector3Value;
-    [SerializeField] private EnemyValue _enemyValue;
+    [SerializeField] private Vector3Value _groundClicksRMB;
+    [SerializeField] private AttackableValue _attackableClicksRMB;
     [SerializeField] private SelectableValue _selectables;
 
     public override void InstallBindings()
     {
         Container.Bind<AssetsContext>().FromInstance(_legacyContext);
-        Container.Bind<Vector3Value>().FromInstance(_vector3Value);
-        Container.Bind<EnemyValue>().FromInstance(_enemyValue);
+        Container.Bind<Vector3Value>().FromInstance(_groundClicksRMB);
+        Container.Bind<AttackableValue>().FromInstance(_attackableClicksRMB);
         Container.Bind<SelectableValue>().FromInstance(_selectables);
 
         Container.Bind<CommandCreatorBase<IProduceUnitCommand>>().To<ProduceUnitCommandCreator>().AsTransient();
@@ -27,5 +28,8 @@ public class UntitledInstaller : ScriptableObjectInstaller<UntitledInstaller>
         Container.Bind<CommandCreatorBase<IStopCommand>>().To<StopCommandCreator>().AsTransient();
 
         Container.Bind<CommandButtonsModel>().AsTransient();
+
+        Container.Bind<IAwaitable<IAttackable>>().FromInstance(_attackableClicksRMB);
+        Container.Bind<IAwaitable<Vector3>>().FromInstance(_groundClicksRMB);
     }
 }

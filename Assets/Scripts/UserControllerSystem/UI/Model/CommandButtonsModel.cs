@@ -9,7 +9,7 @@ namespace UserControllSystem.UI.Model
     public class CommandButtonsModel
     {
         [Inject] private CommandCreatorBase<IProduceUnitCommand> _unitProducer;
-        [Inject] private CommandCreatorBase<IAttackCommand> _attacker;
+        [Inject] public CommandCreatorBase<IAttackCommand> _attacker;
         [Inject] private CommandCreatorBase<IStopCommand> _stopper;
         [Inject] private CommandCreatorBase<IMoveCommand> _mover;
         [Inject] private CommandCreatorBase<IPatrolCommand> _patroller;
@@ -24,22 +24,23 @@ namespace UserControllSystem.UI.Model
         {
             if (_commandIsPending)
             {
-                processOnCancel();
+                ProcessOnCancel();
             }
             _commandIsPending = true;
             OnCommandAccepted?.Invoke(commandExecutor);
             _unitProducer.ProcessCommandExecutor(commandExecutor, command =>
-            executeCommandWrapper(commandExecutor, command));
+            ExecuteCommandWrapper(commandExecutor, command));
             _attacker.ProcessCommandExecutor(commandExecutor, command =>
-            executeCommandWrapper(commandExecutor, command));
+            ExecuteCommandWrapper(commandExecutor, command));
             _stopper.ProcessCommandExecutor(commandExecutor, command =>
-            executeCommandWrapper(commandExecutor, command));
+            ExecuteCommandWrapper(commandExecutor, command));
             _mover.ProcessCommandExecutor(commandExecutor, command =>
-            executeCommandWrapper(commandExecutor, command));
+            ExecuteCommandWrapper(commandExecutor, command));
             _patroller.ProcessCommandExecutor(commandExecutor, command =>
-            executeCommandWrapper(commandExecutor, command));
+            ExecuteCommandWrapper(commandExecutor, command));
         }
-        public void executeCommandWrapper(ICommandExecutor commandExecutor, object command)
+
+        public void ExecuteCommandWrapper(ICommandExecutor commandExecutor, object command)
         {
             commandExecutor.ExecuteCommand(command);
             _commandIsPending = false;
@@ -48,9 +49,9 @@ namespace UserControllSystem.UI.Model
         public void OnSelectionChanged()
         {
             _commandIsPending = false;
-            processOnCancel();
+            ProcessOnCancel();
         }
-        private void processOnCancel()
+        private void ProcessOnCancel()
         {
             _unitProducer.ProcessCancel();
             _attacker.ProcessCancel();

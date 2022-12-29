@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Core
 {
-    public class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable
+    public class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable, IAttackable
     {
         [SerializeField] private Transform _unitsParent;
         [SerializeField] private Sprite _icon;
@@ -16,6 +16,8 @@ namespace Core
         public float Health => _health;
         public float MaxHealth => _maxHealth;
         public Sprite Icon => _icon;
+
+        public Transform PivotPoint => _unitsParent;
 
         public override void ExecuteSpecificCommand(IProduceUnitCommand command) =>
             Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10)), 

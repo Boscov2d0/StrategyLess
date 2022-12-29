@@ -30,6 +30,7 @@ namespace UserControllSystem.UI.Presenter
 
         private void OnSelected(ISelectable selectable) 
         {
+
             if (_currentSelectable == selectable) 
             {
                 return;
