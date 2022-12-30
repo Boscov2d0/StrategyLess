@@ -1,19 +1,8 @@
-using System;
 using Abstractions;
 using UnityEngine;
 
-namespace UserControlSystem
+namespace UserControllSystem.UI.Model
 {
-    [CreateAssetMenu(fileName = nameof(SelectableValue), menuName = "Strategu game/" + nameof(SelectableValue), order = 0)]
-    public class SelectableValue : ScriptableObject
-    {
-        public ISelectable CurrentValue { get; private set; }
-        public Action<ISelectable> OnSelected;
-
-        public void SetValue(ISelectable value)
-        {
-            CurrentValue = value;
-            OnSelected?.Invoke(value);
-        }
-    }
+    [CreateAssetMenu(fileName = nameof(SelectableValue), menuName = "Strategy game/" + nameof(SelectableValue), order = 0)]
+    public class SelectableValue : ObjectValueBase<ISelectable> {}
 }
