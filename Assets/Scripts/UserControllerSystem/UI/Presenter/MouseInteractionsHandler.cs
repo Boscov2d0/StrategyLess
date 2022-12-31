@@ -2,6 +2,7 @@ using Abstractions;
 using Abstractions.Commands;
 using System;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UserControllSystem.UI.Model;
@@ -16,57 +17,57 @@ namespace UserControllSystem
         [SerializeField] private Vector3Value _groundClicksRMB;
         [SerializeField] private AttackableValue _attackablesRMB;
         [SerializeField] private Transform _groundTransform;
+        [SerializeField] private EventSystem _eventSystem;
 
         [Inject] private CommandButtonsModel _model;
         public Action<ICommandExecutor> OnClick;
         ICommandExecutor[] _commands;
-        ISelectable _selectable;
 
         private Plane _groundPlane;
-        private Ray _ray;
-        private RaycastHit[] _hits;
 
-        private void Start()
+        [Inject]
+        private void Init()
         {
             _groundPlane = new Plane(_groundTransform.up, 0);
-        }
 
-        private void Update()
-        {
-            if (EventSystem.current.IsPointerOverGameObject())
-                return;
+            var nonBlockedByUiFramesStream = Observable.EveryUpdate().Where(_ => !_eventSystem.IsPointerOverGameObject());
 
-            if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
-                return;
+            var leftClicksStream = nonBlockedByUiFramesStream.Where(_ => Input.GetMouseButtonDown(0));
+            var rightClicksStream = nonBlockedByUiFramesStream.Where(_ => Input.GetMouseButtonDown(1));
 
-            _ray = _camera.ScreenPointToRay(Input.mousePosition);
-            _hits = Physics.RaycastAll(_ray);
+            var lmbRays = leftClicksStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+            var rmbRays = rightClicksStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
 
-            if (Input.GetMouseButtonUp(0))
+            var lmbHitsStream = lmbRays.Select(ray => Physics.RaycastAll(ray));
+
+            var rmbHitsStream = rmbRays.Select(ray => (ray, Physics.RaycastAll(ray)));
+
+            lmbHitsStream.Subscribe(hits =>
             {
-                if (CheckHit<ISelectable>(_hits, out var selectable))
+                if (CheckHit<ISelectable>(hits, out var selectable))
                 {
-                    _selectable = selectable;
-
-                    _selectedObject.SetValue(_selectable);
+                    _selectedObject.SetValue(selectable);
                 }
-            }
-            else
+            });
+
+            rmbHitsStream.Subscribe(data =>
             {
-                if (CheckHit<IAttackable>(_hits, out var attackable))
+                var (ray, hits) = data;
+                if (CheckHit<IAttackable>(hits, out var attackable))
                 {
                     _attackablesRMB.SetValue(attackable);
                 }
-                else if (_groundPlane.Raycast(_ray, out var enter) && _selectable.GetType().Name == "AllyUnit")
+                else if (_groundPlane.Raycast(ray, out var enter) && _selectedObject.CurrentValue.GetType().Name == "AllyUnit")
                 {
                     _commands = (_selectedObject.CurrentValue as Component).GetComponentsInParent<ICommandExecutor>();
                     OnClick += _model.OnCommandButtonClicked;
                     OnClick?.Invoke(_commands[1]);
                     OnClick -= _model.OnCommandButtonClicked;
-                    _groundClicksRMB.SetValue(_ray.origin + _ray.direction * enter);
+                    _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
                 }
-            }
+            });
         }
+        
         public void ExecuteCommandWrapper(ICommandExecutor commandExecutor, object command)
         {
             commandExecutor.ExecuteCommand(command);
