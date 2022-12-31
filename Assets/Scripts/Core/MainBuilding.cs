@@ -1,14 +1,14 @@
 using Abstractions;
+using Abstractions.Commands;
+using Abstractions.Commands.CommandsInterfaces;
 using UnityEngine;
 
 namespace Core
 {
-    public class MainBuilding : MonoBehaviour, IUnitProducer, ISelectable
+    public class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable, IAttackable
     {
-        [SerializeField] private GameObject _unitPrefab;
         [SerializeField] private Transform _unitsParent;
         [SerializeField] private Sprite _icon;
-        [SerializeField] private Outline.Outline _outline;
         [SerializeField] private float _maxHealth = 1000;
 
         private float _health = 1000;
@@ -17,22 +17,10 @@ namespace Core
         public float MaxHealth => _maxHealth;
         public Sprite Icon => _icon;
 
-        public Outline.Outline Outline => _outline;
+        public Transform PivotPoint => _unitsParent;
 
-
-        private void Awake()
-        {
-            _outline.enabled = false;
-        }
-
-        public void ProduceUnit()
-        {
-            Instantiate(_unitPrefab, new Vector3(Random.Range(-10, 10), 0, Random.Range(-10,
-            10)), Quaternion.identity, _unitsParent);
-        }
-        public void IsSelect(bool select) 
-        {
-            _outline.enabled = select;
-        }
+        public override void ExecuteSpecificCommand(IProduceUnitCommand command) =>
+            Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10)), 
+                Quaternion.identity, _unitsParent);
     }
 }
