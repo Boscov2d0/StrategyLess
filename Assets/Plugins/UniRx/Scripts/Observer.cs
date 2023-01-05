@@ -404,7 +404,7 @@ namespace UniRx
 
     public static partial class ObservableExtensions
     {
-        public static IDisposable Subscribe<T>(this IObservable<T> source)
+        public static IDisposable Subscribe<T>(this IObservable<T> source, object onNewCommand)
         {
             return source.Subscribe(UniRx.InternalUtil.ThrowObserver<T>.Instance);
         }

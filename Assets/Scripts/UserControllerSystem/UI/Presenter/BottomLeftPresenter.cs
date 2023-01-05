@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Abstractions;
 using UserControllSystem.UI.Model;
 
-namespace UserControllSystem
+namespace UserControllSystem.UI.Presenter
 {
     public sealed class BottomLeftPresenter : MonoBehaviour
     {

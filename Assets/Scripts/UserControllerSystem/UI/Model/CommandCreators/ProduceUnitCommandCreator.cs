@@ -7,16 +7,16 @@ using Zenject;
 
 namespace UserControllSystem.UI.Model.CommandCreator
 {
-    public class ProduceUnitCommandCreator : CommandCreatorBase<IProduceUnitCommand>
+    public sealed class ProduceUnitCommandCreator : CommandCreatorBase<IProduceUnitCommand>
     {
         [Inject] private AssetsContext _context;
+        [Inject] private DiContainer _diContainer;
 
-        private int _timeOfCreateCommand = 500;
-
-        protected override async void ClassSpecificCommandCreation(Action<IProduceUnitCommand> creationCallback)
+        protected override void ClassSpecificCommandCreation(Action<IProduceUnitCommand> creationCallback)
         {
-            await Task.Delay(_timeOfCreateCommand);
-            creationCallback?.Invoke(_context.Inject(new ProduceUnitCommandHeir()));
+            ProduceUnitCommandHeir produceUnitCommand = _context.Inject(new ProduceUnitCommandHeir());
+            _diContainer.Inject(produceUnitCommand);
+            creationCallback?.Invoke(produceUnitCommand);
         }
     }
 }
