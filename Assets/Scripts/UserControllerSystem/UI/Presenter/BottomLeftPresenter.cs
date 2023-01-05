@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Abstractions;
+using UserControllSystem.UI.Model;
 
-namespace UserControlSystem
+namespace UserControllSystem.UI.Presenter
 {
     public sealed class BottomLeftPresenter : MonoBehaviour
     {
@@ -16,7 +17,7 @@ namespace UserControlSystem
 
         private void Start()
         {
-            _selectedValue.OnSelected += Onselected;
+            _selectedValue.OnNewValue += Onselected;
             Onselected(_selectedValue.CurrentValue);
         }
 
