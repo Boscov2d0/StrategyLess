@@ -1,11 +1,10 @@
-using Abstractions;
 using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AI;
 using Utils;
 
-namespace Core
+namespace Abstractions
 {
     public class UnitMovementStop : MonoBehaviour, IAwaitable<AsyncExtensions.Void>
     {
@@ -19,30 +18,32 @@ namespace Core
         private void Awake()
         {
             _collisionDetector.Collisions
-            .Where(_ => _agent.hasPath)
-            .Where(collision => collision.collider.GetComponentInParent<ISelectable>() != null)
-            .Select(_ => Time.frameCount)
-            .Distinct()
-            .Buffer(_throttleFrames)
-            .Where(buffer =>
-            {
-                for (int i = 1; i < buffer.Count; i++)
+                .Where(_ => _agent.hasPath)
+                .Where(collision => collision.collider.GetComponentInParent<IUnit>() != null)
+                .Select(_ => Time.frameCount)
+                .Distinct()
+                .Buffer(_throttleFrames)
+                .Where(buffer =>
                 {
-                    if (buffer[i] - buffer[i - 1] > _continuityThreshold)
+                    for (int i = 1; i < buffer.Count; i++)
                     {
-                        return false;
+                        if (buffer[i] - buffer[i - 1] > _continuityThreshold)
+                        {
+                            return false;
+                        }
                     }
-                }
-                return true;
-            }).Subscribe(_ =>
-            {
-                _agent.isStopped = true;
-                _agent.ResetPath();
-                OnStop?.Invoke();
-            }).AddTo(this);
+                    return true;
+                })
+                .Subscribe(_ =>
+                {
+                    _agent.isStopped = true;
+                    _agent.ResetPath();
+                    OnStop?.Invoke();
+                })
+                .AddTo(this);
         }
 
-        void Update()
+        private void Update()
         {
             if (!_agent.pathPending)
             {
@@ -55,6 +56,7 @@ namespace Core
                 }
             }
         }
+
         public IAwaiter<AsyncExtensions.Void> GetAwaiter() => new StopAwaiter(this);
     }
 }

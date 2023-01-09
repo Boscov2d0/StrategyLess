@@ -1,5 +1,4 @@
 using Abstractions.Commands;
-using Core;
 using System;
 
 namespace UserControllSystem.UI.Model.CommandCreator
@@ -8,7 +7,7 @@ namespace UserControllSystem.UI.Model.CommandCreator
     {
         public ICommandExecutor ProcessCommandExecutor(ICommandExecutor commandExecutor, Action<T> callback)
         {
-            ICommandExecutor<T> classSpecificExecutor = commandExecutor as ICommandExecutor<T>;
+            CommandExecutorBase<T> classSpecificExecutor = commandExecutor as CommandExecutorBase<T>;
             if (classSpecificExecutor != null)
             {
                 ClassSpecificCommandCreation(callback);

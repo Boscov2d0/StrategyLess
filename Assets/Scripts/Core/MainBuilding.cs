@@ -1,6 +1,6 @@
 using Abstractions;
+using Abstractions.Commands;
 using Abstractions.Commands.CommandsInterfaces;
-using Core.CommandExecutor;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -18,11 +18,23 @@ namespace Core
         public float MaxHealth => _maxHealth;
         public Sprite Icon => _icon;
 
-        public Vector3 RallyPoint { get; set; }
-
         public Transform PivotPoint => _unitsParent;
 
         public override async Task ExecuteSpecificCommand(IProduceUnitCommand command) =>
-            Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10)), Quaternion.identity, _unitsParent);
+            Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10)), 
+                Quaternion.identity, _unitsParent);
+
+        public void RecieveDamage(int amount)
+        {
+            if (_health <= 0)
+            {
+                return;
+            }
+            _health -= amount;
+            if (_health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }

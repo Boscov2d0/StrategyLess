@@ -13,6 +13,11 @@ namespace UserControllSystem.UI.View
 
         public void SetSelected(bool isSelected)
         {
+            if (this == null)
+            {
+                return;
+            }
+
             if (isSelected == _isSelectedCache)
             {
                 return;

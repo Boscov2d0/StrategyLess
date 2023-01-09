@@ -4,8 +4,8 @@ namespace Abstractions.Commands.CommandsInterfaces
 {
     public interface IProduceUnitCommand : ICommand, IIconHolder
     {
-        GameObject UnitPrefab { get; }
         float ProductionTime { get; }
+        GameObject UnitPrefab { get; }
         string UnitName { get; }
     }
 }

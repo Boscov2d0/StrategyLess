@@ -18,13 +18,8 @@ namespace UserControllSystem.UI.Presenter
         private ISelectable _currentSelectable;
 
         private void Start()
-        {
-
+        { 
             _view.OnClick += _model.OnCommandButtonClicked;
-            if (_model == null)
-                Debug.Log(_model);
-            else
-                Debug.Log("NULL");
             _model.OnCommandSent += _view.UnblockAllInteractions;
             _model.OnCommandCancel += _view.UnblockAllInteractions;
             _model.OnCommandAccepted += _view.BlockInteractions;
@@ -52,9 +47,7 @@ namespace UserControllSystem.UI.Presenter
             {
                 List<ICommandExecutor> commandExecutors = new List<ICommandExecutor>();
                 commandExecutors.AddRange((selectable as Component).GetComponentsInParent<ICommandExecutor>());
-                ICommandsQueue queue = (selectable as Component).GetComponentInParent<ICommandsQueue>();
-                _view.MakeLayout(commandExecutors, queue);
-
+                _view.MakeLayout(commandExecutors);
             }
         }
     }

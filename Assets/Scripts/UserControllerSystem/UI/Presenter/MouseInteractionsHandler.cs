@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using UserControllSystem.UI.Model;
 using Zenject;
 
-namespace UserControllSystem.UI.Presenter
+namespace UserControllSystem
 {
     public class MouseInteractionsHandler : MonoBehaviour
     {
