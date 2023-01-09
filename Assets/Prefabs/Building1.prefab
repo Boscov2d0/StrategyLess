@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3162528575309517070
 Transform:
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4f49f8069f419214c837bdd8ce5110a3, type: 2}
+  - {fileID: 2100000, guid: f183218a53edb7e488d4d714dfc8f946, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,12 +93,16 @@ GameObject:
   m_Component:
   - component: {fileID: 6033186460186398092}
   - component: {fileID: 4146283082276336572}
+  - component: {fileID: 863154133611344560}
+  - component: {fileID: 863154133611344562}
+  - component: {fileID: 863154133611344564}
+  - component: {fileID: 7656859473864088120}
   m_Layer: 0
   m_Name: Building1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6033186460186398092
 Transform:
@@ -130,6 +134,65 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.5, y: 4.5, z: 4.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &863154133611344560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344930286854036129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c8cd5dc6f6d8a4080ac40c9509b185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitsParent: {fileID: 0}
+  _icon: {fileID: 21300000, guid: d4d59117b9f1ffd4a8372b2ed38387bf, type: 3}
+  _maxHealth: 1000
+--- !u!114 &863154133611344562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344930286854036129}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 1, b: 0, a: 1}
+  outlineWidth: 4
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &863154133611344564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344930286854036129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4078c5e6f02ed145aac15b1d0a3d731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outline: {fileID: 863154133611344562}
+--- !u!114 &7656859473864088120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344930286854036129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225c10c16019c8e40a2bd26261958d7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _factionId: 1
 --- !u!1 &5983863697710818452
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +209,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3169455901927926409
 Transform:
